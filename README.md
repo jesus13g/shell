@@ -3,14 +3,14 @@ Se trata de un interprete de comando (shell) que permite ejecutar comandos inter
 
 ## Comandos 
 ### >cd
-    Nos permite movernos por los directorios.
+Nos permite movernos por los directorios.
 ### >help
-    Comando de ayuda para los comandos.
+Comando de ayuda para los comandos.
 ### >exit
-    Salida del shell.
+Salida del shell.
 ### >path
-    Muestra la ruta actual.
+Muestra la ruta actual.
 ### >ls
-    Muestra los archivos del directorio actual.
+Muestra los archivos del directorio actual.
 ### >tree
-    Muestra un arbol de los ficheros del directorio actual
+Muestra un arbol de los ficheros del directorio actual
