@@ -5,6 +5,7 @@
 #include "builtin_path.h"
 #include "builtin_ls.h"
 #include "builtin_tree.h"
+#include "builtin_dir.h"
 #include <sys/wait.h>
 #include <string.h>
 #include <unistd.h>
@@ -26,7 +27,8 @@ char *builtin_str[] = {
   "exit",
   "path",
   "ls",
-  "tree"
+  "tree",
+  "dir"
 };
 
 int (*builtin_func[])(char **) = {
@@ -35,16 +37,19 @@ int (*builtin_func[])(char **) = {
   &lsh_exit,
   &lsh_path,
   &lsh_ls,
-  &lsh_tree
+  &lsh_tree,
+  &lsh_dir
 };
 
 void lsh_loop(void) {
   char *line;
   char **args;
   int status;
+  char cwd[1024];
+  getcwd(cwd, sizeof(cwd));
 
   do {
-    printf("> ");
+    printf(COLOR_BLUE"%s> "COLOR_RESET,cwd);
     line = lsh_read_line();
     args = lsh_split_line(line);
     status = lsh_execute(args);
