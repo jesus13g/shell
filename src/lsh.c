@@ -1,3 +1,11 @@
+/**
+ * fichero lsh.c
+ * Permite crear un shell de comandos basicos para ejecutar en un entorno
+ * 
+ * @author Jesús García Ballesteros
+*/
+
+//Encabecados.
 #include "lsh.h"
 #include "builtin_cd.h"
 #include "builtin_help.h"
@@ -6,17 +14,21 @@
 #include "builtin_ls.h"
 #include "builtin_tree.h"
 #include "builtin_dir.h"
+#include "builtin_delete.h"
+// Bibliotecas.
 #include <sys/wait.h>
 #include <string.h>
 #include <unistd.h>
 
-#define LSH_TOK_BUFSIZE 64
-#define LSH_TOK_DELIM " \t\r\n\a"
+#define LSH_TOK_BUFSIZE 64  // Tamaño del buffer para los tokens
+#define LSH_TOK_DELIM " \t\r\n\a" // Delimita la linea de comando 
+// COLORES PARA PRINTF
 #define COLOR_GREEN   "\x1b[32m"
 #define COLOR_BLUE    "\x1b[34m"
 #define COLOR_RED "\x1b[31m"
 #define COLOR_RESET   "\x1b[0m"
-#define TAB           "   |"
+
+#define TAB           "   |"  // Tabulador del metodo tree
 
 int lsh_launch(char **args);
 int lsh_num_builtins();
@@ -28,7 +40,8 @@ char *builtin_str[] = {
   "path",
   "ls",
   "tree",
-  "dir"
+  "dir",
+  "delete"
 };
 
 int (*builtin_func[])(char **) = {
@@ -38,9 +51,14 @@ int (*builtin_func[])(char **) = {
   &lsh_path,
   &lsh_ls,
   &lsh_tree,
-  &lsh_dir
+  &lsh_dir,
+  &lsh_delete
 };
 
+/**
+ * Maneja el bucle del shell. lee la entrada, la divide en 
+ * tokens y ejecuta el comando ejegido. Continua hasta el comando salida
+*/
 void lsh_loop(void) {
   char *line;
   char **args;
@@ -59,6 +77,9 @@ void lsh_loop(void) {
   } while (status);
 }
 
+/**
+ * Lee una linea de entrada del terminal
+*/
 char *lsh_read_line(void) {
   char *line = NULL;
   size_t bufsize = 0; 
@@ -75,6 +96,9 @@ char *lsh_read_line(void) {
   return line;
 }
 
+/**
+ * Divide una linea de entrada en tokens individuales
+*/
 char **lsh_split_line(char *line) {
   int bufsize = LSH_TOK_BUFSIZE, position = 0;
   char **tokens = malloc(bufsize * sizeof(char*));
@@ -106,6 +130,9 @@ char **lsh_split_line(char *line) {
   return tokens;
 }
 
+/**
+ * Lanza el proceso
+*/
 int lsh_launch(char **args) {
   pid_t pid, wpid;
   int status;
@@ -127,10 +154,17 @@ int lsh_launch(char **args) {
   return 1;
 }
 
+/**
+ * Prototipo de función para obtener el número de comandos internos.
+*/
 int lsh_num_builtins() {
   return sizeof(builtin_str) / sizeof(char *);
 }
 
+/**
+ * Ejecuta comandos de los argumentos proporcionados.
+ * Comprueba si existe el comando y lo ejecuta.
+*/
 int lsh_execute(char **args) {
   int i;
 
