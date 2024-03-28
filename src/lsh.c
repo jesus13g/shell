@@ -5,7 +5,7 @@
  * @author Jesús García Ballesteros
 */
 
-//Encabecados.
+//Encabezados
 #include "lsh.h"
 #include "builtin_cd.h"
 #include "builtin_help.h"
@@ -15,23 +15,15 @@
 #include "builtin_tree.h"
 #include "builtin_dir.h"
 #include "builtin_delete.h"
-// Bibliotecas.
-#include <sys/wait.h>
-#include <string.h>
-#include <unistd.h>
 
-#define LSH_TOK_BUFSIZE 64  // Tamaño del buffer para los tokens
-#define LSH_TOK_DELIM " \t\r\n\a" // Delimita la linea de comando 
+#define LSH_TOK_BUFSIZE 64          // Tamaño del buffer para los tokens
+#define LSH_TOK_DELIM " \t\r\n\a"   // Delimita la línea de comando 
 // COLORES PARA PRINTF
 #define COLOR_GREEN   "\x1b[32m"
 #define COLOR_BLUE    "\x1b[34m"
 #define COLOR_RED "\x1b[31m"
 #define COLOR_RESET   "\x1b[0m"
-
-#define TAB           "   |"  // Tabulador del metodo tree
-
-int lsh_launch(char **args);
-int lsh_num_builtins();
+#define TAB   "   |"                // Tabulador del método tree
 
 char *builtin_str[] = {
   "cd",
@@ -56,18 +48,19 @@ int (*builtin_func[])(char **) = {
 };
 
 /**
- * Maneja el bucle del shell. lee la entrada, la divide en 
- * tokens y ejecuta el comando ejegido. Continua hasta el comando salida
+ * Maneja el bucle del shell. Lee la entrada, la divide en 
+ * tokens y ejecuta el comando elegido. Continua hasta el comando salida
 */
 void lsh_loop(void) {
   char *line;
   char **args;
   int status;
   char cwd[1024];
-  getcwd(cwd, sizeof(cwd));
 
   do {
+    getcwd(cwd, sizeof(cwd)); // Ruta del terminal
     printf(COLOR_BLUE"%s> "COLOR_RESET,cwd);
+
     line = lsh_read_line();
     args = lsh_split_line(line);
     status = lsh_execute(args);
@@ -78,7 +71,7 @@ void lsh_loop(void) {
 }
 
 /**
- * Lee una linea de entrada del terminal
+ * Lee una línea de entrada del terminal
 */
 char *lsh_read_line(void) {
   char *line = NULL;
@@ -97,7 +90,7 @@ char *lsh_read_line(void) {
 }
 
 /**
- * Divide una linea de entrada en tokens individuales
+ * Divide una línea de entrada en tokens individuales
 */
 char **lsh_split_line(char *line) {
   int bufsize = LSH_TOK_BUFSIZE, position = 0;
