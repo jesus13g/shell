@@ -13,4 +13,9 @@ Muestra la ruta actual.
 ### >ls
 Muestra los archivos del directorio actual.
 ### >tree
-Muestra un arbol de los ficheros del directorio actual
+Muestra un arbol de los ficheros del directorio actual.
+### >delete
+Permite borrar ficheros del sistema.
+### >dir
+Permite crear directorios.
+### 
